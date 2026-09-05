@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { OrbitStage } from "@/components/OrbitStage";
 
 type Project = {
   name: string;
@@ -65,18 +66,7 @@ const faqs = [
 
 export default function Index() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isBack, setIsBack] = useState(false);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsBack(window.scrollY > window.innerHeight * 0.46);
-    };
-
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const closeMenu = () => setIsMenuOpen(false);
 
@@ -133,7 +123,9 @@ export default function Index() {
             </div>
           </div>
 
-          <Turntable isBack={isBack} onToggle={() => setIsBack((back) => !back)} />
+          <div className="w-full h-full min-h-[400px]">
+            <OrbitStage />
+          </div>
         </section>
 
         <section id="capabilities" className="mx-auto max-w-6xl scroll-mt-24 px-6 py-10">
@@ -214,7 +206,7 @@ export default function Index() {
         <section className="mx-auto max-w-3xl px-6 py-24">
           <SectionHeading eyebrow="(f) FAQ" title="Frequently asked." />
           <div className="mt-8">
-            <Accordion type="single" collapsible className="w-full">
+            <Accordion className="w-full">
               {faqs.map(([question, answer], i) => (
                 <AccordionItem key={i} value={`faq-${i}`}>
                   <AccordionTrigger className="font-display text-[15px] font-medium tracking-tight text-left">{question}</AccordionTrigger>
@@ -239,13 +231,7 @@ export default function Index() {
   );
 }
 
-function Turntable({ isBack, onToggle }: { isBack: boolean; onToggle: () => void }) {
-  return <div className="animate-rise"><div className="perspective-stage mx-auto w-full max-w-[420px]"><button type="button" onClick={onToggle} aria-label={isBack ? "Show talent side of turntable" : "Show project library side of turntable"} className={`preserve-3d relative aspect-square w-full transition-transform duration-700 ${isBack ? "rotate-y-180" : ""}`}>
-    <span className="backface-hidden absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 via-secondary to-primary/10 ring-1 ring-border shadow-[0_24px_80px_-36px_var(--color-primary)]" />
-    <span className="backface-hidden absolute inset-0 rotate-y-180 rounded-full bg-zinc-950 text-zinc-50 ring-1 ring-zinc-50/15 shadow-[0_24px_80px_-36px_var(--color-accent)]"><span className="absolute inset-[13%] rounded-full border border-zinc-50/15" /><span className="absolute inset-[26%] rounded-full border border-zinc-500/40" /><span className="absolute inset-0 grid place-items-center text-center"><span><span className="block font-mono text-[10px] uppercase tracking-[0.25em] text-zinc-50/50">Backside</span><span className="mt-1 block font-display text-4xl font-semibold tracking-tight">Library</span><span className="mt-2 block font-mono text-[10px] uppercase tracking-[0.18em] text-zinc-50/50">04 systems in orbit</span></span></span><span className="absolute left-[14%] top-[27%] size-3 rounded-full bg-primary ring-4 ring-zinc-50/15" /><span className="absolute bottom-[19%] right-[24%] size-2 rounded-full bg-zinc-400 ring-4 ring-zinc-50/15" /></span>
-    <span className="pointer-events-none absolute inset-[12%] animate-orbit rounded-full border border-primary/25" /><span className="pointer-events-none absolute inset-[12%] rounded-full border-t-2 border-primary/50" /><span className="pointer-events-none absolute inset-[26%] rounded-full border border-border bg-secondary/40 backdrop-blur-sm" /><span className="pointer-events-none absolute inset-0 grid place-items-center text-center"><span><span className="block font-mono text-[10px] uppercase tracking-[0.25em] text-primary">Live — orbit</span><span className="mt-1 block font-display text-4xl font-semibold tracking-tight text-foreground">41</span><span className="block font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">shipped</span></span></span><span className="pointer-events-none absolute left-[8%] top-[24%] size-3 rounded-full bg-primary ring-4 ring-background" /><span className="pointer-events-none absolute right-[12%] top-[40%] size-2.5 rounded-full bg-primary ring-4 ring-background" /><span className="pointer-events-none absolute bottom-[20%] left-[30%] size-2 rounded-full bg-zinc-950/40 ring-4 ring-background" />
-  </button></div><p className="mt-5 text-center font-mono text-[10.5px] uppercase tracking-[0.2em] text-muted-foreground">Scroll to turn the globe · click to explore</p></div>;
-}
+
 
 function SectionHeading({ eyebrow, title }: { eyebrow: string; title: string }) { return <div className="flex items-end justify-between border-b border-border pb-5"><h2 className="max-w-[20ch] font-display text-3xl font-semibold tracking-tight text-balance">{title}</h2><span className="font-mono text-[11px] uppercase tracking-[0.2em] text-muted-foreground">{eyebrow}</span></div>; }
 
